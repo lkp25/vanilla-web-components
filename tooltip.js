@@ -16,6 +16,13 @@ class Tooltip extends HTMLElement{
                     color:white;
                     background-color:black;
                 }
+                ::slotted(span){
+                    border: 2px solid red;
+                }
+                :host(.important){
+                    border: 2px solid green;
+                }
+                
             </style>
             <slot></slot>
             <span>(?)</span>
@@ -32,6 +39,14 @@ class Tooltip extends HTMLElement{
         tooltipIcon.addEventListener('mouseenter', this._showTooltip.bind(this))
         tooltipIcon.addEventListener('mouseleave', this._hideTooltip.bind(this))
         this.shadowRoot.appendChild(tooltipIcon)
+    }
+    attributeChangedCallback(name, oldValue, newValue){
+        console.log(name, oldValue, newValue);
+    }
+    //needed static getter:
+    static get observedAttributes(){
+        //returns array with strings of names of the observed attributes
+        return ['text']
     }
     //method to be called on hover
     _showTooltip(){
