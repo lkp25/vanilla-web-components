@@ -9,6 +9,11 @@
     <script src="tooltip.js" defer></script>
 </head>
 <body>
-    <p><lkp-tooltip></lkp-tooltip>web componenttneo...</p>
+<template id="mytemp">
+    <slot></slot>
+    <span>(?)</span>
+</template>
+
+    <p><lkp-tooltip text="this is awsome tech">THIS TEXT IS NOT VISIBLE BY DEFAULT IF WE USE SHADOW DOM</lkp-tooltip>web componenttneo...</p>
 </body>
 </html>
