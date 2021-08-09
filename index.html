@@ -7,13 +7,23 @@
     <title>web components</title>
     <script src="app.js" defer></script>
     <script src="tooltip.js" defer></script>
+    <script src="Confirm-link.js" defer></script>
+    <script src="open-paragraph.js" defer></script>
 </head>
 <body>
-<template id="mytemp">
-    <slot></slot>
-    <span>(?)</span>
-</template>
+    <style>
+        .highlight{
+            background-color: aqua;
+        }
+    </style>
 
-    <p><lkp-tooltip text="this is awsome tech">THIS TEXT IS NOT VISIBLE BY DEFAULT IF WE USE SHADOW DOM</lkp-tooltip>web componenttneo...</p>
+    <button>SOMETEXT</button>
+    <lkp-summon></lkp-summon>
+
+
+    <lkp-anchor></lkp-anchor>
+    <a is="lkp-anchor" href="www.google.com">click to go to goolgladla</a>
+
+    <p><lkp-tooltip text="this is awsome tech"><span class="highlight">TO JEST CZESC LIGHT DOM</span></lkp-tooltip>web componenttneo...</p>
 </body>
 </html>

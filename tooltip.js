@@ -6,10 +6,20 @@ class Tooltip extends HTMLElement{
         
         //attach shadowDOM
         this.attachShadow({mode: "open"})
-        //get the html template defined in the view file:
-        const template = document.querySelector('#mytemp')
-        //deep clone the template content INTO SHADOW DOM
-        this.shadowRoot.appendChild(template.content.cloneNode(true))
+        this.shadowRoot.innerHTML = `
+            <style>
+                span{
+                    position:relative;
+                }
+                div{
+                    position:absolute;
+                    color:white;
+                    background-color:black;
+                }
+            </style>
+            <slot></slot>
+            <span>(?)</span>
+        `
     }
     connectedCallback(){
         //get the text attr value for use in the custom tooltip:
