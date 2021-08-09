@@ -1,7 +1,7 @@
 class Summon extends HTMLElement{
     constructor(){
         super()
-        this.controlButton = document.querySelector('button')        
+        this.controlButton = document.querySelector('.sometext')        
         //attach shadowDOM
         this.attachShadow({mode: "open"})
         

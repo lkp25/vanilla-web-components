@@ -18,6 +18,8 @@ class Modal extends HTMLElement{
                 z-index: 9000000000;
                 opacity:0;
                 pointer-events:none;
+                transition: 0.3s ease-out;
+
             }
             #modal{
                 position: fixed;
@@ -34,15 +36,21 @@ class Modal extends HTMLElement{
                 justify-content:space-between;
                 opacity:0;
                 pointer-events:none;
+                transition: 0.3s ease-out;
+                transform:translateY(-100px);
             }
             :host([open]) #backdrop, :host([open]) #modal{
                 opacity:1;
                 pointer-events:all;
             }
+            :host([open]) #modal{
+                transform:translateY(0px);
+            }
             header{
                 padding: 1rem;
+                border-bottom: 1px solid black;
             }
-            header h1{
+            ::slotted(h1){
                 font-size: 1.5rem;
             }
             #actions{
@@ -60,18 +68,30 @@ class Modal extends HTMLElement{
         <div id="modal">
             <header>
                 
-                <slot name="title"></slot>
+                <slot name="title">please confirm</slot>
             </header>
             <section id="main">
                 <slot></slot>
             </section>
             <section id="actions">
-                <button>Cancel</button>
-                <button>Okay</button>
+                <button id="cancelBtn">Cancel</button>
+                <button id="confirmBtn">Okay</button>
             </section>
         </div>
         `
-        
+        const slots = this.shadowRoot.querySelectorAll('slot')
+        slots[1].addEventListener('slotchange', e=>{
+            console.dir(slots[1].assignedNodes())
+        })
+        const backdrop = this.shadowRoot.querySelector('#backdrop')
+        backdrop.addEventListener('click', this._cancel.bind(this))
+      
+        const cancelBtn = this.shadowRoot.querySelector('#cancelBtn')
+        const confirmBtn = this.shadowRoot.querySelector('#confirmBtn')
+
+
+        cancelBtn.addEventListener('click', this._cancel.bind(this))
+        confirmBtn.addEventListener('click', this._confirm.bind(this))
     }
 
     //only change attribute - the change is taken care of by CSS rules abouve.
@@ -81,12 +101,34 @@ class Modal extends HTMLElement{
     close(){
         this.removeAttribute('open')
     }
+    _cancel(event){
+        this.close()
+        //bubbles means it can go up the dom tree if the target is not the element that triggered it. composed means it can happen in SHADOW DOM which is the case so we need both!
+        const cancelEvent = new Event('cancel',{bubbles:true, composed:true})
+        event.target.dispatchEvent(cancelEvent)
+    }
+    _confirm(event){
+        this.close()
+        //can be simpler, the THIS element can also dispatch the event for us with no other options as it is already part of the light dom.
+        const confirmEvent = new Event('confirm')
+        this.dispatchEvent(confirmEvent)
+    }
     
 }
 customElements.define('lkp-modal', Modal)
 
 
 const modal = document.querySelector('lkp-modal')
-//all it takes to open and close the modal
-// modal.setAttribute('open', '')
-// modal.removeAttribute('open', '')
+
+//custom events: 
+modal.addEventListener('confirm', e=>{
+    console.log('confirmed....');
+})
+modal.addEventListener('cancel', e=>{
+    console.log('canceleledelde....');
+
+})
+const trigger = document.querySelector("#confirm")
+trigger.addEventListener('click', e=>{
+    modal.open()
+})
